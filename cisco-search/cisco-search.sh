@@ -2,22 +2,22 @@
 
 # Scan cisco backups to retrieve interface information based on search pattern.
 
-# check for arguments
+# Check for arguments
 if [ "$#" -eq 0 ]; then
   echo "Please specify a search pattern"
   exit
 fi
 
-# print help page
+# Print help page
 if [ "$1" = "-h" -o "$1" = "--help" ]; then
   echo "Usage: cisco-search <search pattern>"
   exit
 fi
 
-# path to cisco configs
+# Path to cisco configs
 file="/tmp/cisco-search/*"
 
-# awk program in heredoc
+# AWK program in heredoc
 awk -v search_pattern="$1" -f- $file << 'EOF'
 BEGIN {
   RS = "!\n"
