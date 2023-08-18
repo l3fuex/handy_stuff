@@ -43,3 +43,6 @@
     - name: delete files that are older than the retention period
       shell: "find {{ basedir }}/{{ inventory_hostname }} -type f -mtime +{{ retention_time }} -exec rm {} \\;"
       delegate_to: localhost
+
+- name: include cisco-search playbook
+  import_playbook: cisco-search.yaml
