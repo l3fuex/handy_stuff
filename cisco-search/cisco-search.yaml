@@ -6,6 +6,9 @@
 - name: cisco search
   hosts: cisco
   connection: local
+  vars:
+    workdir: /tmp/cisco-search
+    basedir: /PATH/TO/BACKUPS
 
   pre_tasks:
     - name: check if cisco-search working directory exists
