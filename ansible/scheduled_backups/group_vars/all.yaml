@@ -8,6 +8,5 @@ ansible_password: !vault |
           3665366132616662340a633466363830386534313037633534626466646439326536333763633034
           6235
 ansible_become_password: "{{ ansible_password }}"
-workdir: /tmp/cisco-search
 basedir: /PATH/TO/BACKUPS
 retention_time: 14
