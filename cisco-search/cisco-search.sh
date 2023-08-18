@@ -15,7 +15,7 @@ if [ "$1" = "-h" -o "$1" = "--help" ]; then
 fi
 
 # path to cisco configs
-file="/PATH/TO/CISCO/BACKUPS/*"
+file="/tmp/cisco-search/*"
 
 # awk program in heredoc
 awk -v search_pattern="$1" -f- $file << 'EOF'
