@@ -1,6 +1,6 @@
 # CISCO CONFIG COPY
 
-The script implements functionality to tamper with cisco configs through snmp on a device that supports the CISCO-CONFIG-COPY-MIB.  
+The script implements functionality to tamper with cisco configs through snmp on devices that supports the CISCO-CONFIG-COPY-MIB.  
 Basic instructions like upload or download a given config are sent over snmp. However, a tftp server is needed for this to work as it serves as a way 
 to exchange data like command outputs.
 
