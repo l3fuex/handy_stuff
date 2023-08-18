@@ -41,7 +41,6 @@ FNR > 1 {
   }
 
   if (match($0, search_pattern)) {
-    $0 = "interface" $0
     sub(/!$/, "", $0)
     print
   }
