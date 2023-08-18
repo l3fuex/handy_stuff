@@ -1,0 +1,45 @@
+---
+- name: get timestamp from localhost
+  hosts: localhost
+  gather_facts: true
+
+- name: cisco search
+  hosts: cisco
+  connection: local
+
+  pre_tasks:
+    - name: check if cisco-search working directory exists
+      stat:
+        path: "{{ workdir }}"
+      register: stat_output
+      run_once: true
+
+    - name: delete exisiting cisco-search working directory
+      file:
+        path: "{{ workdir }}"
+        state: absent
+      when: stat_output.stat.exists
+      run_once: true
+
+    - name: create cisco-search working directory
+      file:
+        path: "{{ workdir }}"
+        state: directory
+        mode: '0750'
+      run_once: true
+
+  tasks:
+    - name: copy running config to cisco-search working directory
+      unarchive:
+        src: >-
+          {{ basedir }}/{{ inventory_hostname }}/{{ inventory_hostname }}_{{
+          hostvars['localhost'].ansible_date_time.date }}.tar.gz
+        dest: "{{ workdir }}"
+        mode: '0640'
+
+  post_tasks:
+    - name: replace \n with ! in nxos configs
+      shell: >-
+        perl -p -i -e 's/^\n$/!\n/' {{ workdir }}/{{ inventory_hostname }}_{{
+        hostvars['localhost'].ansible_date_time.date }}.txt
+      when: ansible_network_os == 'nxos'

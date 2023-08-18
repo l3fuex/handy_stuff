@@ -1,0 +1,38 @@
+---
+- name: create local account
+  hosts: cisco
+
+  tasks:
+    - name: add user on ios devices
+      ios_user:
+        name: "{{ username }}"
+        configured_password: "{{ random_password }}"
+        privilege: "{{ privilege_level }}"
+        state: present
+      no_log: true
+      when: "'ios' in group_names"
+
+    - name: add user on nxos devices
+      nxos_user:
+        name: "{{ username }}"
+        configured_password: "{{ random_password }}"
+        role: "{{ role }}"
+        state: present
+      no_log: true
+      when: "'nxos' in group_names"
+    
+    - name: deploy ssh public key on ios devices
+      ios_user:
+        name: "{{ username }}"
+        update_password: on_create
+        sshkey: "{{ lookup('file', 'files/id_rsa.pub') }}"
+      no_log: true
+      when: "'ios' in group_names"
+
+    - name: deploy ssh public key on nxos devices
+      nxos_user:
+        name: "{{ username }}"
+        update_password: on_create
+        sshkey: "{{ lookup('file', 'files/id_rsa.pub') }}"
+      no_log: true
+      when: "'nxos' in group_names"

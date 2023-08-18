@@ -1,0 +1,21 @@
+---
+- name: aireos_backups
+  import_playbook: aireos_backups.yaml
+
+- name: asyncos_backups
+  import_playbook: asyncos_backups.yaml
+
+- name: bigip_backups
+  import_playbook: bigip_backups.yaml
+
+- name: checkpoint_backups
+  import_playbook: checkpoint_backups.yaml
+
+- name: cisco_backups
+  import_playbook: cisco_backups.yaml
+
+- name: linux_backups
+  import_playbook: linux_backups.yaml
+
+- name: dummy_backups
+  import_playbook: dummy_backups.yaml

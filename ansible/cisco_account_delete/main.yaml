@@ -1,0 +1,25 @@
+---
+- name: delete local account
+  hosts: cisco
+
+  tasks:
+    - name: remove ssh-key on ios devices
+      ios_user:
+        name: "{{ username }}"
+        state: absent
+      no_log: true
+      when: "'ios' in group_names"
+
+    - name: remove user on ios devices
+      ios_user:
+        name: "{{ username }}"
+        state: absent
+      no_log: true
+      when: "'ios' in group_names"
+
+    - name: remove user on nxos devices
+      nxos_user:
+        name: "{{ username }}"
+        state: absent
+      no_log: true
+      when: "'nxos' in group_names"

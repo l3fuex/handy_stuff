@@ -1,0 +1,45 @@
+---
+- name: get timestamp from localhost
+  hosts: localhost
+  gather_facts: true
+
+- name: linux backups
+  hosts: linux
+
+  pre_tasks:
+    - name: ensure the destination directory exists
+      file:
+        path: "{{ basedir }}/{{ inventory_hostname }}"
+        state: directory
+      delegate_to: localhost
+
+  tasks:
+    - name: create .tgz file on remote server
+      become: true
+      archive:
+        path: "{{ bkupdir }}"
+        dest: >-
+          /tmp/{{ inventory_hostname }}_{{
+          hostvars['localhost'].ansible_date_time.date }}.tgz
+        format: gz
+
+    - name: transfer backup
+      fetch:
+        src: >-
+          /tmp/{{ inventory_hostname }}_{{
+          hostvars['localhost'].ansible_date_time.date }}.tgz
+        dest: "{{ basedir }}/{{ inventory_hostname }}/"
+        flat: yes
+
+  post_tasks:
+    - name: delete backup file on the remote server
+      become: true
+      file:
+        path: >-
+          /tmp/{{ inventory_hostname }}_{{
+          hostvars['localhost'].ansible_date_time.date }}.tgz
+        state: absent
+
+    - name: delete files that are older than the retention period
+      shell: "find {{ basedir }}/{{ inventory_hostname }} -type f -mtime +{{ retention_time }} -exec rm {} \\;"
+      delegate_to: localhost

@@ -1,0 +1,45 @@
+---
+- name: get timestamp from localhost
+  hosts: localhost
+  gather_facts: true
+
+- name: cisco backups
+  hosts: cisco
+  connection: network_cli
+
+  pre_tasks:
+    - name: ensure the destination directory exists
+      file:
+        path: "{{ basedir }}/{{ inventory_hostname }}"
+        state: directory
+      delegate_to: localhost
+
+  tasks:
+    - name: execute show run on network device
+      cli_command:
+        command: show running-config
+      register: command_output
+
+    - name: copy running config to backup directory
+      copy:
+        content: "{{ command_output.stdout }}"
+        dest: >-
+          {{ basedir }}/{{ inventory_hostname }}/{{ inventory_hostname }}_{{
+          hostvars['localhost'].ansible_date_time.date }}.txt
+
+  post_tasks:
+    - name: compress running config
+      archive:
+        path: >-
+          {{ basedir }}/{{ inventory_hostname }}/{{ inventory_hostname }}_{{
+          hostvars['localhost'].ansible_date_time.date }}.txt
+        dest: >-
+          {{ basedir }}/{{ inventory_hostname }}/{{ inventory_hostname }}_{{
+          hostvars['localhost'].ansible_date_time.date }}.tar.gz
+        format: gz
+        force_archive: true
+        remove: true
+
+    - name: delete files that are older than the retention period
+      shell: "find {{ basedir }}/{{ inventory_hostname }} -type f -mtime +{{ retention_time }} -exec rm {} \\;"
+      delegate_to: localhost

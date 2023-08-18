@@ -1,0 +1,40 @@
+---
+- name: get timestamp from localhost
+  hosts: localhost
+  gather_facts: true
+
+- name: aireos backups
+  hosts: aireos
+  connection: local
+
+  pre_tasks:
+    - name: ensure the destination directory exists
+      file:
+        path: "{{ basedir }}/{{ inventory_hostname }}"
+        state: directory
+
+  tasks:
+    - name: backup running config
+      aireos_config:
+        backup: yes
+        backup_options:
+          filename: >-
+            {{ inventory_hostname }}_{{
+            hostvars['localhost'].ansible_date_time.date }}.txt
+          dir_path: "{{ basedir }}/{{ inventory_hostname }}"
+
+  post_tasks:
+    - name: compress running config
+      archive:
+        path: >-
+          {{ basedir }}/{{ inventory_hostname }}/{{ inventory_hostname }}_{{ 
+          hostvars['localhost'].ansible_date_time.date }}.txt
+        dest: >-
+          {{ basedir }}/{{ inventory_hostname }}/{{ inventory_hostname }}_{{
+          hostvars['localhost'].ansible_date_time.date }}.tar.gz
+        format: gz
+        force_archive: true
+        remove: true
+
+    - name: delete files that are older than the retention period
+      shell: "find {{ basedir }}/{{ inventory_hostname }} -type f -mtime +{{ retention_time }} -exec rm {} \\;"
