@@ -16,7 +16,6 @@ b.barracudacentral.org
 ix.dnsbl.manitu.net  
 dnsbl-1.uceprotect.net  
 bl.score.senderscore.com  
-all.s5h.net  
 
 # Phishing URLs
 https://openphish.com/feed.txt  
