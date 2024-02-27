@@ -1,0 +1,20 @@
+---
+- name: get timestamp from localhost
+  hosts: localhost
+  gather_facts: true
+
+- name: dummy backups
+  hosts: rsaam, ise
+  connection: local
+
+  pre_tasks:
+    - name: ensure the destination directory exists
+      file:
+        path: "{{ basedir }}/{{ inventory_hostname }}"
+        state: directory
+
+  # backup tansfer is handled on the remote system
+
+  post_tasks:
+    - name: find and delete all files that are older than the retention period
+      shell: "find {{ basedir }}/{{ inventory_hostname }} -type f -mtime +{{ retention_time }} -exec rm {} \\;"
