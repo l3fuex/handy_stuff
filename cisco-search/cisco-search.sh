@@ -8,7 +8,7 @@ if [ "$#" -eq 0 ]; then
   exit
 fi
 
-# Print help page
+# Print help
 if [ "$1" = "-h" -o "$1" = "--help" ]; then
   echo "Usage: cisco-search <search pattern>"
   exit
@@ -17,7 +17,7 @@ fi
 # Path to cisco configs
 file="/tmp/cisco-search/*"
 
-# AWK program in heredoc
+# AWK script in heredoc
 awk -v search_pattern="$1" -f- $file << 'EOF'
 BEGIN {
   RS = "!\n"
