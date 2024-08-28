@@ -21,7 +21,7 @@
           {{ basedir }}/{{ inventory_hostname }}/{{ inventory_hostname }}_{{
           hostvars['localhost'].ansible_date_time.date }}.ucs
         provider:
-          server: zaadc2
+          server: "{{ inventory_hostname }}"
           user: "{{ ansible_user }}"
           password: "{{ ansible_password }}"
           validate_certs: false
