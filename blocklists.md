@@ -15,7 +15,6 @@ cbl.abuseat.org
 b.barracudacentral.org  
 ix.dnsbl.manitu.net  
 dnsbl-1.uceprotect.net  
-bl.score.senderscore.com  
 
 # Phishing URLs
 https://openphish.com/feed.txt  
