@@ -16,7 +16,10 @@
   tasks:
     - name: copy remote backup to local server
       shell: >-
-        scp {{ ansible_user }}@{{ inventory_hostname }}:/var/log/CPbackup/backups/*$(date +%d_%b_%Y)*.tgz {{ 
+        scp {{ ansible_user }}@{{ inventory_hostname }}:/var/log/CPbackup/backups/*$(date +%d_%b_%Y)*.tgz {{
+        basedir }}/{{ inventory_hostname }}/{{ inventory_hostname }}_{{
+        hostvars['localhost'].ansible_date_time.date }}.tgz ||
+        scp {{ ansible_user }}@{{ inventory_hostname }}:/var/log/CPbackup/backups/*$(date +%Y_%m_%d)*.tgz {{
         basedir }}/{{ inventory_hostname }}/{{ inventory_hostname }}_{{
         hostvars['localhost'].ansible_date_time.date }}.tgz
 
