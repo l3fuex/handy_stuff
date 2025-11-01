@@ -1,4 +1,0 @@
----
-bkupdir:
-  - /etc/elasticsearch
-  - /etc/logstash
